@@ -15,11 +15,12 @@ public interface HouseService {
 
     /**
      * 房源列表查询
-     * @param pageNum: 查询页码
-     * @param pageSize: 每页记录数
-     * @param houseVo: 查询条件
+     * @param pageNum : 查询页码
+     * @param pageSize : 每页记录数
+     * @param houseVo : 查询条件
+     * @param rentalList
      * @return
      */
-    Page<HouseVo> queryList(int pageNum, int pageSize, HouseVo houseVo);
+    Page<HouseVo> queryList(int pageNum, int pageSize, HouseVo houseVo, String[] rentalList);
 
 }
