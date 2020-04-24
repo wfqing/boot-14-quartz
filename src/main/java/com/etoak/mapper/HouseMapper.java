@@ -28,4 +28,11 @@ public interface HouseMapper {
      * @return
      */
     int updateHouse(House house);
+
+    /**
+     * 根据id删除房源
+     * @param id
+     * @return
+     */
+    int deleteById(int id);
 }
