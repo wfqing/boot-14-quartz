@@ -11,6 +11,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -80,5 +81,16 @@ public class HouseServiceImpl implements HouseService {
 
             houseVo.setRentalMapList(rentalMapList);
         }
+    }
+
+    @Override
+    public int updateHouse(House house) {
+        // 如果传过来的area字段不为空，认为需要修改所在区，根据地区id查询地区，重新给areaName赋值即可
+        if(house.getCity() != null) {
+            Area area = areaMapper.queryById(house.getArea());
+            house.setAreaName(area.getName());
+        }
+
+        return houseMapper.updateHouse(house);
     }
 }
