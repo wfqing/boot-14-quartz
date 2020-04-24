@@ -10,4 +10,8 @@ public class User {
     private String gender;
     private Integer age;
     private String birthday;
+    // 注册邮箱
+    private String email;
+    // 用户状态:0未激活，1:已激活
+    private Integer state;
 }
