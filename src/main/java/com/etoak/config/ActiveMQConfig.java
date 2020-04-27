@@ -10,7 +10,7 @@ import javax.jms.ConnectionFactory;
 import javax.jms.DeliveryMode;
 import javax.jms.Session;
 
-@Configuration
+// @Configuration
 public class ActiveMQConfig {
 
     /**

@@ -9,3 +9,5 @@ CREATE TABLE `t_boot_user` (
   `birthday` date NOT NULL COMMENT '出生日期',
   PRIMARY KEY (`id`)
 );
+INSERT INTO t_boot_user (`id`, `name`, `password`, `gender`, `age`, `email`, `state`, `birthday`) VALUES ('1', 'admin', '703f98fddf99e32c85f9435081081ea2', '男', '12', '431103832@qq.com', '1', '2020-04-24');
+

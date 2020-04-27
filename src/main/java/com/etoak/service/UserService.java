@@ -10,4 +10,12 @@ public interface UserService {
      * @return
      */
     int addUser(User user);
+
+    /**
+     * 根据用户名查询用户信息
+     * @param name
+     * @return
+     */
+    User queryByName(String name);
+    
 }

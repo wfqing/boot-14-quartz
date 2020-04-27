@@ -23,8 +23,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserMapper userMapper;
 
-    @Autowired
-    JmsTemplate jmsTemplate;
+    //@Autowired
+    //JmsTemplate jmsTemplate;
 
     @Override
     public int addUser(User user) {
@@ -39,13 +39,18 @@ public class UserServiceImpl implements UserService {
         log.info("user.id - {}", user.getId());
 
         // 发视JMS消息
-        jmsTemplate.send("email", session -> {
-            Email email = new Email();
-            email.setSubject("用户激活邮件");
-            email.setReceiver(user.getEmail());
-            email.setContent("请点击激活:http://localhost:8001/boot/user/active/" + user.getId());
-            return session.createTextMessage(JSONObject.toJSONString(email));
-        });
+//        jmsTemplate.send("email", session -> {
+//            Email email = new Email();
+//            email.setSubject("用户激活邮件");
+//            email.setReceiver(user.getEmail());
+//            email.setContent("请点击激活:http://localhost:8001/boot/user/active/" + user.getId());
+//            return session.createTextMessage(JSONObject.toJSONString(email));
+//        });
         return addResult;
+    }
+
+    @Override
+    public User queryByName(String name) {
+        return userMapper.queryByName(name);
     }
 }
