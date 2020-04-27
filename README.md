@@ -13,3 +13,8 @@ git fetch origin master
 
 # 切回本地master分支，合并远程master分支
 git merge origin/master
+
+## git revert
+```
+  撤销某个commit
+```
