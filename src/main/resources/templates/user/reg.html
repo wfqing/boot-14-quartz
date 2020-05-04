@@ -1,0 +1,146 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>用户注册</title>
+    <link th:href="@{/lib/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <style>
+        body {
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <!--
+        用户名
+        邮箱
+        密码
+        确认密码
+        年龄
+        性别
+    -->
+    <form id="regForm" th:action="@{/user/reg}" method="post" class="form-horizontal" role="form">
+        <!-- 1. 用户名 -->
+        <div class="form-group">
+            <label for="username" class="col-sm-2 control-label">用户名</label>
+            <div class="col-sm-3 input-group">
+                <input type="text" id="username" class="form-control" name="name">
+            </div>
+        </div>
+        <!-- 2. 密码 -->
+        <div class="form-group">
+            <label for="password" class="col-sm-2 control-label">密码</label>
+            <div class="col-sm-3 input-group">
+                <input type="password" id="password" class="form-control" name="password">
+            </div>
+        </div>
+        <!-- 3. 确认密码 -->
+        <div class="form-group">
+            <label for="confirm_password" class="col-sm-2 control-label">确认密码</label>
+            <div class="col-sm-3 input-group">
+                <input type="password" id="confirm_password" class="form-control" name="confirmPassword">
+            </div>
+        </div>
+        <!-- 4. 邮箱 -->
+        <div class="form-group">
+            <label for="email" class="col-sm-2 control-label">邮箱</label>
+            <div class="col-sm-3 input-group">
+                <input type="email" id="email" class="form-control" name="email">
+            </div>
+        </div>
+        <!-- 5. 年龄 -->
+        <div class="form-group">
+            <label for="age" class="col-sm-2 control-label">年龄</label>
+            <div class="col-sm-3 input-group">
+                <input type="number" id="age" class="form-control" name="age">
+            </div>
+        </div>
+        <!-- 6. 性别 -->
+        <div class="form-group">
+            <label class="col-sm-2 control-label">邮箱</label>
+            <div class="col-sm-6 input-group">
+                <label class="radio-inline">
+                    <input type="radio" name="gender" value="男"> 男
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="gender" value="女"> 女
+                </label>
+            </div>
+        </div>
+
+        <!-- 7. 注册按钮 -->
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-3">
+                <button type="submit" class="btn btn-primary">注册</button>
+            </div>
+        </div>
+    </form>
+    <script th:src="@{/lib/js/jquery/jquery.min.js}"></script>
+    <script th:src="@{/lib/bootstrap/js/bootstrap.min.js}"></script>
+    <!-- jquery校验插件 和它的汉化插件 -->
+    <script th:src="@{/lib/js/jquery/validate/jquery.validate.min.js}"></script>
+    <script th:src="@{/lib/js/jquery/validate/messages_zh.min.js}"></script>
+    <script th:inline="javascript">
+        // 定义contextPath
+        const path = [[${#request.getContextPath()}]];
+        $(function(){
+            user.regValidate();
+        });
+
+        let user = {
+            // 注册表单校验
+            regValidate: function() {
+                $('#regForm').validate({
+                    errorElement: 'div',
+                    success: function(successElement) {
+                        successElement.addClass('input-group-addon').text('OK');
+                    },
+                    errorPlacement: function(errorEle, element) {
+                        errorEle.addClass('input-group-addon');
+                        errorEle.appendTo(element.parent());
+                    },
+                    rules: {
+                        name: {
+                            required: true,
+                            /**
+                             * 远程地址必须返回字符串类型的 "true" 或 "false"
+                             * 远程返回"true": 表示校验通过
+                             * 远程返回回"false": 表示校验不通过
+                             */
+                            remote: { // GET  http://localhost:8001/boot/user/validateName?name=xxx
+                                url: path + '/user/validateName',
+                                type: 'GET',
+                                data: {
+                                    name: function() {
+                                        return $('#username').val();
+                                    }
+                                }
+                            }
+                        },
+                        password: 'required',
+                        confirmPassword: {
+                            required: true,
+                            equalTo: '#password'
+                        }
+                    },
+                    messages: {
+                        name: {
+                            required: '必填项',
+                            remote: '用户名已存在'
+                        },
+                        password: '必填项',
+                        confirmPassword: {
+                            required: '必填项',
+                            equalTo: '密码不一致'
+                        }
+                    }
+                });
+            }
+        };
+
+    </script>
+</body>
+</html>

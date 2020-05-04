@@ -1,5 +1,6 @@
 server:
   port: 8001
+<<<<<<< HEAD
 
 spring:
   task:
@@ -10,9 +11,50 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/et1910?serverTimezone=GMT
+=======
+  servlet:
+    context-path: /boot
+
+# 数据源
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/et1910?serverTimezone=UTC
+>>>>>>> luxilejn/master
     username: root
     password: root
     hikari:
       maximum-pool-size: 50
 
+<<<<<<< HEAD
 
+=======
+  thymeleaf:
+    cache: false
+    encoding: UTF-8
+  servlet:
+    multipart:
+      # 默认1MB
+      max-file-size: 2MB
+
+# MyBatis
+mybatis:
+  mapper-locations: classpath:mappers/*.xml
+  type-aliases-package: com.etoak.bean
+
+# pagehelper
+pagehelper:
+  reasonable: true
+
+# 打印sql
+logging:
+  level:
+    com.etoak.mapper: DEBUG
+
+
+# 自定义配置：文件上传和图片访问配置
+upload:
+  dir: d:/upload/
+  savePathPrefix: /pics/
+  mapping: /pics/**
+>>>>>>> luxilejn/master

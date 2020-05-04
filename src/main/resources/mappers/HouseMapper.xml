@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.etoak.mapper.HouseMapper">
+
+    <insert id="addHouse" parameterType="House">
+        INSERT INTO t_boot_house(
+            province,
+            city,
+            area,
+            area_name,
+            rent_mode,
+            house_type,
+            orientation,
+            rental,
+            address,
+            pic,
+            publish_time
+        ) VALUES (
+            #{province},
+            #{city},
+            #{area},
+            #{areaName},
+            #{rentMode},
+            #{houseType},
+            #{orientation},
+            #{rental},
+            #{address},
+            #{pic},
+            NOW()
+        )
+    </insert>
+
+    <select id="queryList" parameterType="HouseVo" resultType="HouseVo">
+        select t.id,
+			   t.province,
+			   t.city,
+			   t.area,
+			   t.area_name AS areaName,
+			   t.rent_mode AS rentMode,
+		       t2.name as rentModeName,
+			   t.house_type AS houseType,
+			   t3.name AS houseTypeName,
+			   t.orientation,
+			   t4.name AS orientationName,
+			   t.rental,
+			   t.address,
+			   t.pic,
+			   DATE_FORMAT(t.publish_time, '%Y-%m-%d %H:%i:%s') AS publishTime
+          FROM t_boot_house t
+          LEFT JOIN t_springmvc_dict t2 ON t.rent_mode = t2.`value` AND t2.group_id = 'rent_mode'
+	      LEFT JOIN t_springmvc_dict t3 ON t.house_type = t3.`value` AND t3.group_id = 'house_type'
+	      LEFT JOIN t_springmvc_dict t4 ON t.orientation = t4.`value` AND t4.group_id = 'orientation'
+	      <where>
+              <if test="province != null and province != 0 ">
+                  AND province = #{province}
+              </if>
+              <if test="city != null  and city != 0 ">
+                  AND city = #{city}
+              </if>
+              <if test="area != null and area != 0 ">
+                  AND area = #{area}
+              </if>
+              <if test="rentMode != null and rentMode != '' ">
+                  AND rent_mode = #{rentMode}
+              </if>
+
+              <if test="houseTypeList != null and houseTypeList.length != 0 ">
+                  AND t.house_type IN
+                  <foreach collection="houseTypeList" item="houseType" open="(" close=")" separator=",">
+                      #{houseType}
+                  </foreach>
+              </if>
+              <if test="orientationList != null and orientationList.size() != 0">
+                  AND t.orientation IN
+                  <foreach collection="orientationList" item="orientation" open="(" close=")" separator=",">
+                      #{orientation}
+                  </foreach>
+              </if>
+              <if test="rentalMapList != null and rentalMapList.size() != 0 ">
+                  AND
+                  <foreach collection="rentalMapList" item="rentalMap" open="(" close=")" separator="OR">
+                      t.rental BETWEEN #{rentalMap.start} AND #{rentalMap.end}
+                  </foreach>
+              </if>
+          </where>
+          ORDER BY t.publish_time
+    </select>
+
+    <update id="updateHouse" parameterType="house">
+        UPDATE t_boot_house
+        <set>
+            <if test="province != null and province != 0 ">
+                province = #{province},
+            </if>
+            <if test="city != null and city != 0 ">
+                city = #{city},
+            </if>
+            <if test="area != null and area != 0 ">
+                area = #{area},
+            </if>
+            <if test="rentMode != null and rentMode != '' ">
+                rent_mode = #{rentMode},
+            </if>
+            <if test="houseType != null and houseType != '' ">
+                house_type = #{houseType},
+            </if>
+            <if test="orientation != null and orientation != '' ">
+                orientation = #{orientation},
+            </if>
+            <if test="rental != null and rental != 0 ">
+                rental = #{rental},
+            </if>
+            <if test="address != null and address != '' ">
+                address = #{address},
+            </if>
+            <if test="areaName != null and areaName != '' ">
+                area_name = #{areaName},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="int">
+        DELETE
+          FROM t_boot_house
+        WHERE id = #{value}
+    </delete>
+
+</mapper>
